@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>WebSocket Client</title>
+  </head>
+  <body>
+    <h1>Redis Pub/Sub</h1>
+    <input
+      id="message"
+      type="text"
+      autofocus
+      placeholder="Send to Redis Pub/Sub"
+    />
+    <input
+      type="text"
+      value="test-channel"
+      id="channel"
+      placeholder="Channel name"
+    />
+    <div id="messages"></div>
+
+    <script>
+      const socket = new WebSocket("ws://localhost:8080");
+
+      function beautify(str) {
+        try {
+          const result = JSON.stringify(JSON.parse(str), null, 2)
+            .replace(/"(.*?)":/g, "<b>$1</b>:")
+            // .replace(
+            //   /"(.*?)":(.*?)(,|})/g,
+            //   '"<b>$1</b>":<span class="value">$2</span>$3'
+            // )
+            .replace(/ /g, "&nbsp;")
+            .replace(/\n/g, "<br />");
+          return result;
+        } catch (e) {
+          return str;
+        }
+      }
+
+      const messagesDiv = document.getElementById("messages");
+      socket.addEventListener("message", (event) => {
+        let object = event.data;
+        try {
+          if (object.toString().includes(":")) {
+            let [channel, message] = object
+              .toString()
+              .split(/:(.+)/)
+              .map((part) => part.trim());
+            messagesDiv.innerHTML += `<p><span class="date">${new Date().toLocaleTimeString()}</span> <strong>${channel}</strong>: ${beautify(
+              message
+            )}</p>`;
+          } else {
+            messagesDiv.innerHTML += `<p>${object}</p>`;
+          }
+        } catch (e) {
+          console.error(e);
+          messagesDiv.innerHTML += `<p>${event.data}</p>`;
+          return;
+        } finally {
+          messagesDiv.scrollTop = messagesDiv.scrollHeight;
+        }
+      });
+
+      socket.addEventListener("error", (event) => {
+        console.error("WebSocket error:", event);
+      });
+
+      socket.addEventListener("close", (event) => {
+        console.log("WebSocket connection closed:", event);
+      });
+
+      const messageInput = document.getElementById("message");
+      const channelInput = document.getElementById("channel");
+      const submitHandler = (event) => {
+        if (event.key === "Enter") {
+          if (messageInput.value.trim()) {
+            socket.send(
+              JSON.stringify({
+                channel: channelInput.value,
+                message: messageInput.value,
+              })
+            );
+          }
+          messageInput.value = "";
+        }
+      };
+      messageInput.addEventListener("keyup", submitHandler);
+      channelInput.addEventListener("keyup", submitHandler);
+    </script>
+  </body>
+  <style>
+    body {
+      font-family: sans-serif;
+      background-color: #10051f;
+      color: #fff;
+      prefers-color-scheme: dark;
+    }
+    input {
+      min-width: 300px;
+      padding: 10px;
+      margin-bottom: 10px;
+      border: 1px solid #eee;
+      border-radius: 5px;
+
+      mix-blend-mode: difference;
+      background-color: #aed2ff;
+    }
+    #messages {
+      border: 1px solid #eee;
+      border-radius: 5px;
+      padding: 10px;
+      max-height: 70vh;
+      overflow-y: scroll;
+      background-color: #1a0033;
+    }
+    #messages p {
+      margin-block: 15px;
+      margin-inline: 0px;
+      word-break: break-all;
+    }
+    strong {
+      color: #9400ff;
+    }
+    span.date {
+      color: #e4f1ff;
+      font-size: 12px;
+    }
+  </style>
+</html>
