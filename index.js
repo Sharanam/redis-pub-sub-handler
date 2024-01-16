@@ -1,9 +1,15 @@
 const redis = require("redis");
+const dotenv = require("dotenv");
 const WebSocket = require("ws");
 
+dotenv.config();
+
 const redisClient = redis.createClient({
-  url: "redis://127.0.0.1:6379",
-  database: 0,
+  // staging redis
+  url: process.env.REDIS_URL || "redis://127.0.0.1:6379",
+  password: process.env.REDIS_PASSWORD,
+
+  database: process.env.REDIS_DB || 0,
 });
 
 const subscriber = redisClient;
@@ -17,7 +23,7 @@ const publisher = redisClient.duplicate();
 
   await publisher.connect();
 
-  console.log("Redis connected");
+  console.log("Redis connected to " + (process.env.REDIS_URL || "localhost"));
 })();
 
 const wss = new WebSocket.Server({ port: 8080 });
