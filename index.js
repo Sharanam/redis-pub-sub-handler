@@ -7,7 +7,7 @@ dotenv.config();
 const redisClient = redis.createClient({
   // staging redis
   url: process.env.REDIS_URL || "redis://127.0.0.1:6379",
-  password: process.env.REDIS_PASSWORD,
+  password: process.env.REDIS_PASSWORD || "",
 
   database: process.env.REDIS_DB || 0,
 });
