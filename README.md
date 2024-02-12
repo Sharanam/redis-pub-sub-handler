@@ -12,13 +12,21 @@ Follow the steps below to get the project up and running:
    npm install
    ```
 
-2. Start the server with the command:
+2. Create `.env` file with the necessary/default configuration settings.
+
+   ```.env
+      REDIS_URL="redis://127.0.0.1:6379" # address of the Redis server
+      REDIS_PASSWORD=""
+      REDIS_DB=0
+   ```
+
+3. Start the server with the command:
 
    ```bash
    npm start
    ```
 
-3. Open the [index.html](index.html) file in your browser. If needed, modify the Redis and WebSocket configurations according to your requirements.
+4. Open the [index.html](index.html) file in your browser. If needed, modify the Redis and WebSocket configurations according to your requirements.
 
 ### Redis Pub/Sub
 
