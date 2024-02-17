@@ -1,6 +1,6 @@
 import { For, render } from "solid-js/web";
 import "./app.css";
-import { Show, createEffect, createSignal } from "solid-js";
+import { Show, createSignal } from "solid-js";
 
 const root = document.getElementById("root");
 
@@ -13,7 +13,7 @@ if (import.meta.env.DEV && !(root instanceof HTMLElement)) {
 render(() => <App key={0} />, root);
 
 function App() {
-  const ws = new WebSocket("ws://localhost:8080");
+  const ws = new WebSocket(`ws://localhost:${import.meta.env.WS_PORT || 8080}`);
 
   ws.onopen = () => {
     console.log("Connected to the WebSocket server");

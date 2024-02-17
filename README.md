@@ -18,6 +18,7 @@ Follow the steps below to get the project up and running:
       REDIS_URL="redis://127.0.0.1:6379" # address of the Redis server
       REDIS_PASSWORD=""
       REDIS_DB=0
+      WS_PORT=8080
    ```
 
 3. Start the server with the command:
