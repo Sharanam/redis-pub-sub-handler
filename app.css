@@ -1,0 +1,42 @@
+body {
+  font-family: sans-serif;
+  background-color: #10051f;
+  color: #fff;
+  prefers-color-scheme: dark;
+}
+input {
+  min-width: 300px;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #eee;
+  border-radius: 5px;
+
+  mix-blend-mode: difference;
+  background-color: #aed2ff;
+}
+#messages {
+  border: 1px solid #eee;
+  border-radius: 5px;
+  padding: 10px;
+  max-height: 70vh;
+  overflow-y: scroll;
+  background-color: #1a0033;
+}
+#messages p {
+  margin-block: 15px;
+  margin-inline: 0px;
+  word-break: break-all;
+}
+#messages span.unit {
+  display: block;
+  padding: 5px;
+  border: 1px solid #ccc;
+  margin: 5px 0;
+}
+strong {
+  color: #9400ff;
+}
+span.date {
+  color: #e4f1ff;
+  font-size: 12px;
+}
