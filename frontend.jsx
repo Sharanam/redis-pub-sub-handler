@@ -1,6 +1,7 @@
+import { codeToHtml } from "shiki";
 import { For, render } from "solid-js/web";
-import "./app.css";
 import { Show, createSignal } from "solid-js";
+import "./app.css";
 
 const root = document.getElementById("root");
 
@@ -24,8 +25,9 @@ function App() {
 
   const [incomingMessages, setIncomingMessages] = createSignal({});
 
-  ws.onmessage = (event) => {
+  ws.onmessage = async (event) => {
     let [channel, message] = event.data.split(/:(.+)/).map((x) => x.trim());
+    message = await beautify(message);
     setIncomingMessages((prev) => {
       return {
         ...prev,
@@ -44,21 +46,25 @@ function App() {
     }
   }
 
-  function beautify(message) {
+  async function beautify(message) {
     let res;
     try {
       message = JSON.parse(message);
       res = JSON.stringify(message, null, 2);
 
-      res = res
-        .replace(/\\n/g, "<br>")
-        .replace(/"(.*?)":/g, "<b>$1</b>:")
-        .replace(/ /g, "&nbsp;")
-        .replace(/\n/g, "<br />");
+      // res = res
+      //   .replace(/\\n/g, "<br>")
+      //   .replace(/"(.*?)":/g, "<b>$1</b>:")
+      //   .replace(/ /g, "&nbsp;")
+      //   .replace(/\n/g, "<br />");
+
+      // // sanitize html
+      // res = res.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+
+      res = await codeToHtml(res, { lang: "json", theme: "houston" });
     } catch (_) {
       res = message;
     }
-
     return res;
   }
 
@@ -95,7 +101,7 @@ function App() {
                   {(message) => (
                     <span
                       className="unit"
-                      innerHTML={message && beautify(message)}
+                      innerHTML={message}
                     ></span>
                   )}
                 </For>
