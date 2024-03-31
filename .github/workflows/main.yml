@@ -1,0 +1,13 @@
+name: Upload coverage reports to Codecov
+on: [push, pull_request]
+jobs:
+  run:
+      runs-on: ubuntu-latest
+      steps:
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v4.0.1
+        with:
+          flags: smart-tests
+          verbose: true
+        env:
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
