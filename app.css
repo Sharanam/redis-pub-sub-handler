@@ -40,3 +40,9 @@ span.date {
   color: #e4f1ff;
   font-size: 12px;
 }
+.channels {
+  display: flex;
+  flex: auto 1;
+  gap: 10px;
+  margin-block: 10px;
+}

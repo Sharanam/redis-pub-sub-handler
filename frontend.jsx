@@ -88,6 +88,22 @@ function App() {
         onInput={(e) => setChannel(e.target.value)}
         onKeyUp={handleSubmit}
       />
+      <div className="channels">
+        <For each={Object.keys(incomingMessages())}>
+          {(channel) => (
+            <button
+              onClick={() =>
+                setIncomingMessages((prev) => {
+                  delete prev[channel];
+                  return { ...prev };
+                })
+              }
+            >
+              ❌ {channel}
+            </button>
+          )}
+        </For>
+      </div>
       <div id="messages">
         <For
           each={Object.keys(incomingMessages())}
