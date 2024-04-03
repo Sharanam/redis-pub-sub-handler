@@ -46,3 +46,38 @@ span.date {
   gap: 10px;
   margin-block: 10px;
 }
+button.channel-btn {
+  padding: 10px;
+  border: 1px solid #eee;
+  border-radius: 5px;
+  background-color: #aed2ff;
+  mix-blend-mode: difference;
+}
+.row-1 {
+  display: flex;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  justify-content: space-between;
+}
+
+.filter-container {
+  display: flex;
+  gap: 10px;
+}
+/* .filter-container textarea {
+  padding: 10px;
+  border: 1px solid #eee;
+  border-radius: 5px;
+  background-color: #aed2ff;
+  mix-blend-mode: difference;
+  resize: none;
+  min-width: 300px;
+  min-height: 100px;
+} */
+.filter-container button {
+  padding: 10px;
+  border: 1px solid #eee;
+  border-radius: 5px;
+  background-color: #aed2ff;
+  mix-blend-mode: difference;
+}
