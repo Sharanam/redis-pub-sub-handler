@@ -1,4 +1,4 @@
-import { codeToHtml } from "shiki";
+import { codeToHtml, bundledThemes } from "shiki";
 import { For, render } from "solid-js/web";
 import { Show, createSignal } from "solid-js";
 import "./app.css";
@@ -14,7 +14,7 @@ if (import.meta.env.DEV && !(root instanceof HTMLElement)) {
 render(() => <App key={0} />, root);
 
 function App() {
-  const ws = new WebSocket(`ws://localhost:${import.meta.env.WS_PORT || 8080}`);
+  const ws = new WebSocket(`ws://localhost:${import.meta.env.WS_PORT || 8081}`);
 
   ws.onopen = () => {
     console.log("Connected to the WebSocket server");
@@ -25,6 +25,13 @@ function App() {
 
   const [incomingMessages, setIncomingMessages] = createSignal({});
   const [hiddenChannels, setHiddenChannels] = createSignal([]);
+
+  const [allowMultipleChannels, setAllowMultipleChannels] = createSignal(false);
+  const [currentChannel, setCurrentChannel] = createSignal("Welcome");
+
+  const [myTheme, setMyTheme] = createSignal(
+    window.localStorage.getItem("theme") || "houston"
+  );
 
   ws.onmessage = async (event) => {
     let [channel, message] = event.data.split(/:(.+)/).map((x) => x.trim());
@@ -62,7 +69,10 @@ function App() {
       // // sanitize html
       // res = res.replace(/</g, "&lt;").replace(/>/g, "&gt;");
 
-      res = await codeToHtml(res, { lang: "json", theme: "houston" });
+      res = await codeToHtml(res, {
+        lang: "json",
+        theme: myTheme(),
+      });
     } catch (_) {
       res = message;
     }
@@ -117,52 +127,118 @@ function App() {
           Hide all
         </button>
       </div> */}
-      <p>Channels</p>
-      <div className="channels">
-        <For each={Object.keys(incomingMessages())}>
-          {(channel) => (
-            <button
-              className="channel-btn"
-              onClick={() => {
-                if (hiddenChannels().includes(channel)) {
-                  setHiddenChannels((prev) =>
-                    prev.filter((ch) => ch !== channel)
-                  );
-                } else {
-                  setHiddenChannels((prev) => [...prev, channel]);
-                }
-              }}
-            >
-              {hiddenChannels().includes(channel) ? "🟪 " : "☑️ "} {channel}
-            </button>
-          )}
-        </For>
+      <div className="heading">
+        <h2>Subscribers</h2>
+        <label for="theme">
+          Theme:{" "}
+          <select
+            id="theme"
+            onChange={(e) => {
+              setMyTheme(e.target.value);
+              window.localStorage.setItem("theme", e.target.value);
+            }}
+          >
+            <For each={Object.keys(bundledThemes)}>
+              {(theme) => (
+                <option
+                  value={theme}
+                  selected={theme === myTheme()}
+                >
+                  {theme}
+                </option>
+              )}
+            </For>
+          </select>
+        </label>
+        <label for="multipleChannels">
+          <input
+            type="checkbox"
+            id="multipleChannels"
+            checked={allowMultipleChannels()}
+            onChange={(e) => setAllowMultipleChannels(e.target.checked)}
+          />{" "}
+          Allow multiple channels
+        </label>
       </div>
-      <div id="messages">
-        <For
-          each={Object.keys(incomingMessages()).filter(
-            (channel) => !hiddenChannels().includes(channel)
-          )}
-          fallback={<p>No messages</p>}
-        >
-          {(channel) => (
-            <Show when={!hiddenChannels().includes(channel)}>
-              <p>
-                <strong>{channel}</strong>
-                <Show when={incomingMessages()[channel]?.length}>
-                  <For each={incomingMessages()[channel]}>
-                    {(message) => (
-                      <span
-                        className="unit"
-                        innerHTML={message}
-                      ></span>
-                    )}
-                  </For>
-                </Show>
-              </p>
+      <div className="window">
+        <div className="channels">
+          <For each={Object.keys(incomingMessages())}>
+            {(channel) => (
+              <button
+                className={`channel-btn ${
+                  !allowMultipleChannels() && currentChannel() === channel
+                    ? "active"
+                    : ""
+                }`}
+                onClick={() => {
+                  if (!allowMultipleChannels()) {
+                    setCurrentChannel(channel);
+                    return;
+                  }
+                  if (hiddenChannels().includes(channel)) {
+                    setHiddenChannels((prev) =>
+                      prev.filter((ch) => ch !== channel)
+                    );
+                  } else {
+                    setHiddenChannels((prev) => [...prev, channel]);
+                  }
+                }}
+              >
+                {allowMultipleChannels()
+                  ? hiddenChannels().includes(channel)
+                    ? "🟪 "
+                    : "☑️ "
+                  : ""}{" "}
+                {channel}
+              </button>
+            )}
+          </For>
+        </div>
+        <div id="messages">
+          <Show
+            when={!allowMultipleChannels() && currentChannel()}
+            fallback={
+              <For
+                each={Object.keys(incomingMessages()).filter(
+                  (channel) => !hiddenChannels().includes(channel)
+                )}
+                fallback={<p>No messages</p>}
+              >
+                {(channel) => (
+                  <Show when={!hiddenChannels().includes(channel)}>
+                    <p>
+                      <strong>{channel}</strong>
+                      <Show when={incomingMessages()[channel]?.length}>
+                        <For each={incomingMessages()[channel]}>
+                          {(message) => (
+                            <span
+                              className="unit"
+                              innerHTML={message}
+                            ></span>
+                          )}
+                        </For>
+                      </Show>
+                    </p>
+                  </Show>
+                )}
+              </For>
+            }
+          >
+            <Show when={incomingMessages()[currentChannel()]?.length}>
+              <strong className="sticky-channel-name">
+                {currentChannel()}
+              </strong>
+              <For each={incomingMessages()[currentChannel()]}>
+                {(message) => (
+                  <span
+                    className="unit"
+                    innerHTML={message}
+                  ></span>
+                )}
+              </For>
             </Show>
-          )}
-        </For>
+          </Show>
+        </div>
       </div>
     </>
   );

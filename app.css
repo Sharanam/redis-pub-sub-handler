@@ -14,6 +14,15 @@ input {
   mix-blend-mode: difference;
   background-color: #aed2ff;
 }
+label[for="multipleChannels"] {
+  display: inline;
+  margin-right: 10px;
+}
+input[type="checkbox"] {
+  min-width: auto;
+  display: inline;
+}
+
 #messages {
   border: 1px solid #eee;
   border-radius: 5px;
@@ -41,10 +50,15 @@ span.date {
   font-size: 12px;
 }
 .channels {
-  display: flex;
-  flex: auto 1;
+  display: grid;
   gap: 10px;
-  margin-block: 10px;
+  grid-template: 1fr;
+  height: max-content;
+  margin-right: 10px;
+}
+button.channel-btn.active {
+  background-color: #9400ff;
+  color: #fff;
 }
 button.channel-btn {
   padding: 10px;
@@ -52,6 +66,16 @@ button.channel-btn {
   border-radius: 5px;
   background-color: #aed2ff;
   mix-blend-mode: difference;
+  height: max-content;
+  width: 100%;
+  text-align: left;
+  cursor: pointer;
+}
+strong.sticky-channel-name {
+  position: sticky;
+  top: 0;
+  background-color: #1a0033;
+  z-index: 1;
 }
 .row-1 {
   display: flex;
@@ -80,4 +104,42 @@ button.channel-btn {
   border-radius: 5px;
   background-color: #aed2ff;
   mix-blend-mode: difference;
+}
+.heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+button.allow-multiple-channels {
+  padding: 10px;
+  border: 1px solid #eee;
+  border-radius: 5px;
+  background-color: #aed2ff;
+  mix-blend-mode: difference;
+}
+
+select {
+  padding: 10px;
+  border: 1px solid #eee;
+  border-radius: 5px;
+  background-color: #aed2ff;
+  mix-blend-mode: difference;
+}
+
+.window {
+  display: grid;
+  grid-template-columns: 1fr 80vw;
+}
+
+@media (max-width: 768px) {
+  .window {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+  .channels {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    justify-content: space-between;
+  }
 }
