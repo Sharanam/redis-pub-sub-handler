@@ -44,7 +44,16 @@ function App() {
           : prev[channel],
       };
     });
+
+    playSoundForChannel(channel);
   };
+  function playSoundForChannel(channel) {
+    if (!allowMultipleChannels() && currentChannel() === channel) {
+      new Audio("sms.mp3").play();
+    } else {
+      new Audio("beep_beep.mp3").play();
+    }
+  }
 
   function handleSubmit(e) {
     if (e.key === "Enter") {
@@ -230,10 +239,12 @@ function App() {
               </strong>
               <For each={incomingMessages()[currentChannel()]}>
                 {(message) => (
-                  <span
-                    className="unit"
-                    innerHTML={message}
-                  ></span>
+                  <div className="unit">
+                    <label>
+                      <input type="checkbox">Read more</input>
+                    </label>
+                    <span innerHTML={message}></span>
+                  </div>
                 )}
               </For>
             </Show>

@@ -36,11 +36,24 @@ input[type="checkbox"] {
   margin-inline: 0px;
   word-break: break-all;
 }
-#messages span.unit {
+#messages div.unit:has(input[type="checkbox"]:checked) {
+  height: auto;
+}
+/* #messages div.unit input[type="checkbox"]:checked { */
+#messages div.unit label {
+  position: sticky;
+  top: 0;
+  right: 0;
+}
+#messages div.unit {
   display: block;
   padding: 5px;
   border: 1px solid #ccc;
   margin: 5px 0;
+  height: 3rem;
+  overflow-y: hidden;
+
+  position: relative;
 }
 strong {
   color: #9400ff;
@@ -76,6 +89,8 @@ strong.sticky-channel-name {
   top: 0;
   background-color: #1a0033;
   z-index: 1;
+  float: right;
+  margin-left: -100%;
 }
 .row-1 {
   display: flex;
