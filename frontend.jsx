@@ -13,6 +13,31 @@ if (import.meta.env.DEV && !(root instanceof HTMLElement)) {
 
 render(() => <App key={0} />, root);
 
+function Publisher({ channel, message, setChannel, setMessage, handleSubmit }) {
+  return (
+    <div className="publisher">
+      <h2>Publisher</h2>
+      <input
+        id="message"
+        type="text"
+        autofocus
+        placeholder="Send to Redis Pub/Sub"
+        value={message()}
+        onInput={(e) => setMessage(e.target.value)}
+        onKeyUp={handleSubmit}
+      />
+      <input
+        type="text"
+        id="channel"
+        placeholder="Channel name"
+        value={channel()}
+        onInput={(e) => setChannel(e.target.value)}
+        onKeyUp={handleSubmit}
+      />
+    </div>
+  );
+}
+
 function App() {
   const ws = new WebSocket(`ws://localhost:${import.meta.env.WS_PORT || 8081}`);
 
@@ -91,28 +116,13 @@ function App() {
   return (
     <>
       <h1>Redis Pub/Sub</h1>
-      <div className="row-1">
-        <div className="publisher">
-          <h2>Publisher</h2>
-          <input
-            id="message"
-            type="text"
-            autofocus
-            placeholder="Send to Redis Pub/Sub"
-            value={message()}
-            onInput={(e) => setMessage(e.target.value)}
-            onKeyUp={handleSubmit}
-          />
-          <input
-            type="text"
-            id="channel"
-            placeholder="Channel name"
-            value={channel()}
-            onInput={(e) => setChannel(e.target.value)}
-            onKeyUp={handleSubmit}
-          />
-        </div>
-      </div>
+      <Publisher
+        channel={channel}
+        message={message}
+        setChannel={setChannel}
+        setMessage={setMessage}
+        handleSubmit={handleSubmit}
+      />
       {/* <div className="filter-container">
         <textarea
           id="filter"
@@ -182,6 +192,7 @@ function App() {
                 onClick={() => {
                   if (!allowMultipleChannels()) {
                     setCurrentChannel(channel);
+                    setChannel(channel);
                     return;
                   }
                   if (hiddenChannels().includes(channel)) {
@@ -241,7 +252,7 @@ function App() {
                 {(message) => (
                   <div className="unit">
                     <label>
-                      <input type="checkbox">Read more</input>
+                      <input type="checkbox" />
                     </label>
                     <span innerHTML={message}></span>
                   </div>
