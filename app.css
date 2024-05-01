@@ -1,11 +1,11 @@
 :root {
-  --primary-color: #9400ff;
-  --secondary-color: #aed2ff;
-  --tertiary-color: #e4f1ff;
-  --dark-color: #10051f;
-  --light-color: #fff;
-  --border-color: #eee;
-  --hover-color: #1a0033;
+  --primary-color: hsl(275, 100%, 50%);
+  --secondary-color: hsl(213, 100%, 84%);
+  --tertiary-color: hsl(211, 100%, 95%);
+  --dark-color: hsl(0, 0%, 0%);
+  --light-color: hsl(0, 0%, 100%);
+  --border-color: hsl(0, 0%, 93%);
+  --hover-color: hsl(271, 100%, 10%);
 }
 
 body {
@@ -25,53 +25,92 @@ input {
   mix-blend-mode: difference;
   background-color: var(--secondary-color);
 }
-label[for="multipleChannels"] {
+
+label:has(input[type="checkbox"]:checked) {
+  background-color: var(--primary-color);
+}
+label.background-indicator {
   display: inline;
-  margin-right: 10px;
+  padding-block: 10px;
+  padding-inline: 5px;
+  mix-blend-mode: difference;
+  color: var(--light-color);
+  border-radius: 5px;
+}
+.configurations {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+label input[type="checkbox"] {
+  display: none;
 }
 input[type="checkbox"] {
   min-width: auto;
   display: inline;
 }
+label[for="theme"] span {
+  position: absolute;
+  font-size: 12px;
+  transform: translateY(-100%);
+  mix-blend-mode: difference;
+  z-index: 1;
+}
+label[for="theme"] {
+  position: relative;
+}
+select {
+  padding: 10px;
+  border: 1px solid var(--border-color);
+  border-radius: 5px;
+  background-color: var(--secondary-color);
+  mix-blend-mode: difference;
+}
 
 #messages {
   border: 1px solid var(--border-color);
   border-radius: 5px;
-  padding: 10px;
+  padding: 2px;
   max-height: 70vh;
   overflow-y: scroll;
   background-color: var(--hover-color);
+  width: 30%;
 }
 #messages p {
   margin-block: 15px;
   margin-inline: 0px;
   word-break: break-all;
 }
-#messages div.unit:has(input[type="checkbox"]:checked),
+/* #messages div.unit:has(input[type="checkbox"]:checked),
 #messages div.unit:hover {
   height: auto;
+} */
+
+.unit.selected {
+  background-color: var(--primary-color);
 }
-/* #messages div.unit input[type="checkbox"]:checked { */
-#messages div.unit label {
-  position: sticky;
-  top: 0;
-  right: 0;
+
+#messages .unit span {
+  z-index: -1;
 }
-#messages div.unit {
+#messages .unit {
   display: block;
   padding: 5px;
   border: 1px solid var(--border-color);
-  margin: 5px 0;
+  margin-block: 2px;
   height: 3rem;
-  overflow-y: hidden;
-  overflow-x: hidden;
-
+  width: 100%;
+  overflow: hidden;
+  text-align: left;
   position: relative;
+  cursor: pointer;
 }
 strong {
   color: var(--primary-color);
 }
-span.date {
+.time {
   color: var(--tertiary-color);
   font-size: 12px;
 }
@@ -80,7 +119,7 @@ span.date {
   gap: 10px;
   grid-template: 1fr;
   height: max-content;
-  margin-right: 10px;
+  width: 30%;
 }
 button.channel-btn.active {
   background-color: var(--primary-color);
@@ -116,16 +155,6 @@ strong.sticky-channel-name {
   display: flex;
   gap: 10px;
 }
-/* .filter-container textarea {
-  padding: 10px;
-  border: 1px solid var(--border-color);
-  border-radius: 5px;
-  background-color: var(--secondary-color);
-  mix-blend-mode: difference;
-  resize: none;
-  min-width: 300px;
-  min-height: 100px;
-} */
 .filter-container button {
   padding: 10px;
   border: 1px solid var(--border-color);
@@ -146,17 +175,22 @@ button.allow-multiple-channels {
   mix-blend-mode: difference;
 }
 
-select {
-  padding: 10px;
-  border: 1px solid var(--border-color);
-  border-radius: 5px;
-  background-color: var(--secondary-color);
-  mix-blend-mode: difference;
-}
-
 .window {
-  display: grid;
-  grid-template-columns: 1fr 80vw;
+  display: flex;
+  gap: 10px;
+}
+.current-message-viewer button {
+  position: sticky;
+  top: 0;
+  float: right;
+
+  z-index: 1;
+}
+.current-message-viewer {
+  width: 70%;
+  overflow-y: scroll;
+  flex-grow: 1;
+  height: 70vh;
 }
 
 @media (max-width: 768px) {
