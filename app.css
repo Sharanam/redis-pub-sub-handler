@@ -1,18 +1,29 @@
+:root {
+  --primary-color: #9400ff;
+  --secondary-color: #aed2ff;
+  --tertiary-color: #e4f1ff;
+  --dark-color: #10051f;
+  --light-color: #fff;
+  --border-color: #eee;
+  --hover-color: #1a0033;
+}
+
 body {
   font-family: sans-serif;
-  background-color: #10051f;
-  color: #fff;
+  background-color: var(--dark-color);
+  color: var(--light-color);
   prefers-color-scheme: dark;
+  overflow-y: scroll;
 }
 input {
   min-width: 300px;
   padding: 10px;
   margin-bottom: 10px;
-  border: 1px solid #eee;
+  border: 1px solid var(--border-color);
   border-radius: 5px;
 
   mix-blend-mode: difference;
-  background-color: #aed2ff;
+  background-color: var(--secondary-color);
 }
 label[for="multipleChannels"] {
   display: inline;
@@ -24,19 +35,20 @@ input[type="checkbox"] {
 }
 
 #messages {
-  border: 1px solid #eee;
+  border: 1px solid var(--border-color);
   border-radius: 5px;
   padding: 10px;
   max-height: 70vh;
   overflow-y: scroll;
-  background-color: #1a0033;
+  background-color: var(--hover-color);
 }
 #messages p {
   margin-block: 15px;
   margin-inline: 0px;
   word-break: break-all;
 }
-#messages div.unit:has(input[type="checkbox"]:checked) {
+#messages div.unit:has(input[type="checkbox"]:checked),
+#messages div.unit:hover {
   height: auto;
 }
 /* #messages div.unit input[type="checkbox"]:checked { */
@@ -48,18 +60,19 @@ input[type="checkbox"] {
 #messages div.unit {
   display: block;
   padding: 5px;
-  border: 1px solid #ccc;
+  border: 1px solid var(--border-color);
   margin: 5px 0;
   height: 3rem;
   overflow-y: hidden;
+  overflow-x: hidden;
 
   position: relative;
 }
 strong {
-  color: #9400ff;
+  color: var(--primary-color);
 }
 span.date {
-  color: #e4f1ff;
+  color: var(--tertiary-color);
   font-size: 12px;
 }
 .channels {
@@ -70,14 +83,14 @@ span.date {
   margin-right: 10px;
 }
 button.channel-btn.active {
-  background-color: #9400ff;
-  color: #fff;
+  background-color: var(--primary-color);
+  color: var(--light-color);
 }
 button.channel-btn {
   padding: 10px;
-  border: 1px solid #eee;
+  border: 1px solid var(--border-color);
   border-radius: 5px;
-  background-color: #aed2ff;
+  background-color: var(--secondary-color);
   mix-blend-mode: difference;
   height: max-content;
   width: 100%;
@@ -87,7 +100,7 @@ button.channel-btn {
 strong.sticky-channel-name {
   position: sticky;
   top: 0;
-  background-color: #1a0033;
+  background-color: var(--hover-color);
   z-index: 1;
   float: right;
   margin-left: -100%;
@@ -105,9 +118,9 @@ strong.sticky-channel-name {
 }
 /* .filter-container textarea {
   padding: 10px;
-  border: 1px solid #eee;
+  border: 1px solid var(--border-color);
   border-radius: 5px;
-  background-color: #aed2ff;
+  background-color: var(--secondary-color);
   mix-blend-mode: difference;
   resize: none;
   min-width: 300px;
@@ -115,9 +128,9 @@ strong.sticky-channel-name {
 } */
 .filter-container button {
   padding: 10px;
-  border: 1px solid #eee;
+  border: 1px solid var(--border-color);
   border-radius: 5px;
-  background-color: #aed2ff;
+  background-color: var(--secondary-color);
   mix-blend-mode: difference;
 }
 .heading {
@@ -127,17 +140,17 @@ strong.sticky-channel-name {
 }
 button.allow-multiple-channels {
   padding: 10px;
-  border: 1px solid #eee;
+  border: 1px solid var(--border-color);
   border-radius: 5px;
-  background-color: #aed2ff;
+  background-color: var(--secondary-color);
   mix-blend-mode: difference;
 }
 
 select {
   padding: 10px;
-  border: 1px solid #eee;
+  border: 1px solid var(--border-color);
   border-radius: 5px;
-  background-color: #aed2ff;
+  background-color: var(--secondary-color);
   mix-blend-mode: difference;
 }
 
