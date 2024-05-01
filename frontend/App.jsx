@@ -1,10 +1,22 @@
 import { For } from "solid-js/web";
 import { codeToHtml } from "shiki";
-import { Show, createSignal } from "solid-js";
+import { Show, createSignal, onMount } from "solid-js";
 import { Configurations, Publisher } from "./components";
 
 export default function App() {
   const ws = new WebSocket(`ws://localhost:${import.meta.env.WS_PORT || 8081}`);
+  onMount(() => {
+    document.addEventListener("keydown", (e) => {
+      // left arrow key
+      if (e.keyCode === 37) {
+        document.querySelector(".selected")?.previousElementSibling?.click();
+      }
+      // right arrow key
+      if (e.keyCode === 39) {
+        document.querySelector(".selected")?.nextElementSibling?.click();
+      }
+    });
+  });
 
   ws.onopen = () => {
     console.log("Connected to the WebSocket server");
@@ -177,9 +189,6 @@ export default function App() {
             }
           >
             <Show when={incomingMessages()[currentChannel()]?.length}>
-              {/* <strong className="sticky-channel-name">
-                {currentChannel()}
-              </strong> */}
               <For each={incomingMessages()[currentChannel()]}>
                 {(message) => (
                   <button

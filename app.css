@@ -1,8 +1,8 @@
 :root {
-  --primary-color: hsl(275, 100%, 50%);
-  --secondary-color: hsl(213, 100%, 84%);
+  --primary-color: hsl(30, 100%, 50%);
+  --secondary-color: hsl(50, 100%, 84%);
   --tertiary-color: hsl(211, 100%, 95%);
-  --dark-color: hsl(0, 0%, 0%);
+  --dark-color: hsl(0, 0%, 20%);
   --light-color: hsl(0, 0%, 100%);
   --border-color: hsl(0, 0%, 93%);
   --hover-color: hsl(271, 100%, 10%);
@@ -22,7 +22,6 @@ input {
   border: 1px solid var(--border-color);
   border-radius: 5px;
 
-  mix-blend-mode: difference;
   background-color: var(--secondary-color);
 }
 
@@ -55,7 +54,6 @@ label[for="theme"] span {
   position: absolute;
   font-size: 12px;
   transform: translateY(-100%);
-  mix-blend-mode: difference;
   z-index: 1;
 }
 label[for="theme"] {
@@ -66,7 +64,6 @@ select {
   border: 1px solid var(--border-color);
   border-radius: 5px;
   background-color: var(--secondary-color);
-  mix-blend-mode: difference;
 }
 
 #messages {
@@ -75,7 +72,6 @@ select {
   padding: 2px;
   max-height: 70vh;
   overflow-y: scroll;
-  background-color: var(--hover-color);
   width: 30%;
 }
 #messages p {
@@ -130,20 +126,13 @@ button.channel-btn {
   border: 1px solid var(--border-color);
   border-radius: 5px;
   background-color: var(--secondary-color);
-  mix-blend-mode: difference;
+
   height: max-content;
   width: 100%;
   text-align: left;
   cursor: pointer;
 }
-strong.sticky-channel-name {
-  position: sticky;
-  top: 0;
-  background-color: var(--hover-color);
-  z-index: 1;
-  float: right;
-  margin-left: -100%;
-}
+
 .row-1 {
   display: flex;
   grid-template-columns: repeat(2, 1fr);
@@ -160,19 +149,11 @@ strong.sticky-channel-name {
   border: 1px solid var(--border-color);
   border-radius: 5px;
   background-color: var(--secondary-color);
-  mix-blend-mode: difference;
 }
 .heading {
   display: flex;
   justify-content: space-between;
   align-items: center;
-}
-button.allow-multiple-channels {
-  padding: 10px;
-  border: 1px solid var(--border-color);
-  border-radius: 5px;
-  background-color: var(--secondary-color);
-  mix-blend-mode: difference;
 }
 
 .window {
