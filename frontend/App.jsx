@@ -38,7 +38,9 @@ export default function App() {
 
   const [diffMessage, setDiffMessage] = createSignal("");
 
-  const [showBeatifiedOnly, setShowBeatifiedOnly] = createSignal(true);
+  const [showBeatifiedOnly, setShowBeatifiedOnly] = createSignal(
+    window.localStorage.getItem("showBeatifiedOnly") === "true" || false
+  );
 
   const [myTheme, setMyTheme] = createSignal(
     window.localStorage.getItem("theme") || "houston"

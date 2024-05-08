@@ -73,7 +73,10 @@ export function Configurations({
           type="checkbox"
           id="showBeatifiedOnly"
           checked={showBeatifiedOnly()}
-          onChange={(e) => setShowBeatifiedOnly(e.target.checked)}
+          onChange={(e) => {
+            setShowBeatifiedOnly(e.target.checked);
+            localStorage.setItem("showBeatifiedOnly", e.target.checked);
+          }}
         />{" "}
         Show beatified version
       </label>
