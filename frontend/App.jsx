@@ -1,7 +1,10 @@
 import { For } from "solid-js/web";
+import Diff from "text-diff";
 import { codeToHtml } from "shiki";
 import { Show, createSignal, onMount } from "solid-js";
 import { Configurations, Publisher } from "./components";
+
+const diff = new Diff({});
 
 export default function App() {
   const ws = new WebSocket(`ws://localhost:${import.meta.env.WS_PORT || 8081}`);
@@ -32,6 +35,10 @@ export default function App() {
   const [currentChannel, setCurrentChannel] = createSignal("Welcome");
 
   const [currentMessage, setCurrentMessage] = createSignal("");
+
+  const [diffMessage, setDiffMessage] = createSignal("");
+
+  const [showBeatifiedOnly, setShowBeatifiedOnly] = createSignal(true);
 
   const [myTheme, setMyTheme] = createSignal(
     window.localStorage.getItem("theme") || "houston"
@@ -118,6 +125,8 @@ export default function App() {
             }
             setIsAudio(val);
           }}
+          showBeatifiedOnly={showBeatifiedOnly}
+          setShowBeatifiedOnly={setShowBeatifiedOnly}
         />
       </div>
       <div className="window">
@@ -190,7 +199,7 @@ export default function App() {
           >
             <Show when={incomingMessages()[currentChannel()]?.length}>
               <For each={incomingMessages()[currentChannel()]}>
-                {(message) => (
+                {(message, index) => (
                   <button
                     className="unit"
                     onClick={async (e) => {
@@ -199,6 +208,32 @@ export default function App() {
                         .forEach((el) => el.classList.remove("selected"));
                       e.target.classList.add("selected");
                       setCurrentMessage(await beautify(message[0]));
+
+                      // set diff message
+                      if (index() > 0) {
+                        const d = diff.main(
+                          ...[
+                            incomingMessages()[currentChannel()][
+                              index() - 1
+                            ][0],
+                            message[0],
+                          ].map((x) => {
+                            let parsed;
+                            try {
+                              parsed = JSON.stringify(JSON.parse(x), null, 2);
+                              parsed = parsed
+                                .replace(/\\n/g, "<br />")
+                                .replace(/\\t/g, "&nbsp;&nbsp;&nbsp;&nbsp;");
+                            } catch (e) {
+                              parsed = x;
+                            }
+                            return parsed;
+                          })
+                        );
+                        setDiffMessage(diff.prettyHtml(d));
+                      } else {
+                        setDiffMessage(await beautify(message[0]));
+                      }
                     }}
                   >
                     {message[1]} <br />
@@ -209,17 +244,28 @@ export default function App() {
             </Show>
           </Show>
         </div>
-        <div className="current-message-viewer">
-          <button
-            onClick={() => {
-              document.querySelector(".selected")?.classList.remove("selected");
-              setCurrentMessage("");
-            }}
-          >
-            Hide
-          </button>
-          <div innerHTML={currentMessage()}></div>
-        </div>
+        <Show
+          when={showBeatifiedOnly()}
+          fallback={
+            <div className="diff-message-viewer">
+              <div innerHTML={diffMessage()}></div>
+            </div>
+          }
+        >
+          <div className="current-message-viewer">
+            <button
+              onClick={() => {
+                document
+                  .querySelector(".selected")
+                  ?.classList.remove("selected");
+                setCurrentMessage("");
+              }}
+            >
+              Hide
+            </button>
+            <div innerHTML={currentMessage()}></div>
+          </div>
+        </Show>
       </div>
     </>
   );

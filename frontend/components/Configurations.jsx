@@ -7,6 +7,8 @@ export function Configurations({
   setAllowMultipleChannels,
   audio,
   setAudio,
+  showBeatifiedOnly,
+  setShowBeatifiedOnly,
 }) {
   return (
     <div className="configurations">
@@ -21,6 +23,7 @@ export function Configurations({
             setMyTheme(e.target.value);
             window.localStorage.setItem("theme", e.target.value);
           }}
+          disabled={!showBeatifiedOnly()}
         >
           <For each={Object.keys(bundledThemes)}>
             {(theme) => (
@@ -59,6 +62,20 @@ export function Configurations({
           onChange={(e) => setAudio(e.target.checked)}
         />{" "}
         🔊
+      </label>
+      {/* showBeatifiedOnly */}
+      <label
+        for="showBeatifiedOnly"
+        className="background-indicator"
+        title="Show only the beatified messages."
+      >
+        <input
+          type="checkbox"
+          id="showBeatifiedOnly"
+          checked={showBeatifiedOnly()}
+          onChange={(e) => setShowBeatifiedOnly(e.target.checked)}
+        />{" "}
+        Show beatified version
       </label>
     </div>
   );

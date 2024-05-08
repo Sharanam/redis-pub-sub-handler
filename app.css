@@ -6,6 +6,8 @@
   --light-color: hsl(0, 0%, 100%);
   --border-color: hsl(0, 0%, 93%);
   --hover-color: hsl(271, 100%, 10%);
+  --green-color: hsl(120, 100%, 30%);
+  --danger-color: hsl(0, 100%, 30%);
 }
 
 body {
@@ -70,7 +72,7 @@ select {
   border: 1px solid var(--border-color);
   border-radius: 5px;
   padding: 2px;
-  max-height: 70vh;
+  max-height: 60vh;
   overflow-y: scroll;
   width: 30%;
 }
@@ -79,10 +81,6 @@ select {
   margin-inline: 0px;
   word-break: break-all;
 }
-/* #messages div.unit:has(input[type="checkbox"]:checked),
-#messages div.unit:hover {
-  height: auto;
-} */
 
 .unit.selected {
   background-color: var(--primary-color);
@@ -171,7 +169,25 @@ button.channel-btn {
   width: 70%;
   overflow-y: scroll;
   flex-grow: 1;
-  height: 70vh;
+  height: 60vh;
+}
+.diff-message-viewer {
+  width: 70%;
+  overflow-y: scroll;
+  flex-grow: 0;
+  height: 60vh;
+  word-wrap: break-word;
+}
+
+ins {
+  background-color: var(--green-color);
+  color: var(--light-color);
+  text-decoration: none;
+}
+del {
+  background-color: var(--danger-color);
+  color: var(--light-color);
+  text-decoration: none;
 }
 
 @media (max-width: 768px) {
