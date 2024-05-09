@@ -278,6 +278,7 @@ export default function App() {
               }}
               data-name="copy button"
               title="press c to copy"
+              disabled={!currentMessage()}
             >
               Copy
             </button>
