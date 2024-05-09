@@ -169,6 +169,10 @@ button.channel-btn {
 .current-message-viewer button:first-child {
   margin: 0;
 }
+button.copied {
+  background-color: var(--primary-color);
+  color: var(--light-color);
+}
 .current-message-viewer {
   width: 70%;
   overflow-y: scroll;

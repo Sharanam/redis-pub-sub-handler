@@ -39,6 +39,7 @@ export default function App() {
   const [currentChannel, setCurrentChannel] = createSignal("Welcome");
 
   const [currentMessage, setCurrentMessage] = createSignal("");
+  const [isCopied, setIsCopied] = createSignal(false);
 
   const [diffMessage, setDiffMessage] = createSignal("");
 
@@ -149,6 +150,7 @@ export default function App() {
                   if (currentChannel() !== channel) {
                     setCurrentChannel(channel);
                     setCurrentMessage("Channel has been changed.");
+                    setIsCopied(false);
                   }
                   setPublisherChannel(channel);
                   if (!allowMultipleChannels()) {
@@ -240,6 +242,7 @@ export default function App() {
                       } else {
                         setDiffMessage(await beautify(message[0]));
                       }
+                      setIsCopied(false);
                     }}
                   >
                     {message[1]} <br />
@@ -265,6 +268,7 @@ export default function App() {
                   .querySelector(".selected")
                   ?.classList.remove("selected");
                 setCurrentMessage("");
+                setIsCopied(false);
               }}
             >
               Hide
@@ -275,12 +279,14 @@ export default function App() {
                   document.querySelector("[data-name='current-message']")
                     .innerText
                 );
+                setIsCopied(true);
               }}
               data-name="copy button"
               title="press c to copy"
               disabled={!currentMessage()}
+              className={isCopied() ? "copied" : ""}
             >
-              Copy
+              {isCopied() ? "Copied" : "Copy"}
             </button>
             <div
               data-name="current-message"
