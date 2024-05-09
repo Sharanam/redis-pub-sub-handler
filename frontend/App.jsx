@@ -18,6 +18,10 @@ export default function App() {
       if (e.keyCode === 39) {
         document.querySelector(".selected")?.nextElementSibling?.click();
       }
+      // copy button click on c key
+      if (e.keyCode === 67) {
+        document.querySelector("button[data-name='copy button']")?.click();
+      }
     });
   });
 
@@ -265,7 +269,22 @@ export default function App() {
             >
               Hide
             </button>
-            <div innerHTML={currentMessage()}></div>
+            <button
+              onClick={() => {
+                navigator.clipboard.writeText(
+                  document.querySelector("[data-name='current-message']")
+                    .innerText
+                );
+              }}
+              data-name="copy button"
+              title="press c to copy"
+            >
+              Copy
+            </button>
+            <div
+              data-name="current-message"
+              innerHTML={currentMessage()}
+            ></div>
           </div>
         </Show>
       </div>
