@@ -140,38 +140,56 @@ export default function App() {
         <div className="channels">
           <For each={Object.keys(incomingMessages())}>
             {(channel) => (
-              <button
-                className={`channel-btn ${
-                  !allowMultipleChannels() && currentChannel() === channel
-                    ? "active"
-                    : ""
-                }`}
-                onClick={() => {
-                  if (currentChannel() !== channel) {
-                    setCurrentChannel(channel);
-                    setCurrentMessage("Channel has been changed.");
-                    setIsCopied(false);
-                  }
-                  setPublisherChannel(channel);
-                  if (!allowMultipleChannels()) {
-                    return;
-                  }
-                  if (hiddenChannels().includes(channel)) {
-                    setHiddenChannels((prev) =>
-                      prev.filter((ch) => ch !== channel)
-                    );
-                  } else {
-                    setHiddenChannels((prev) => [...prev, channel]);
-                  }
-                }}
-              >
-                {allowMultipleChannels()
-                  ? hiddenChannels().includes(channel)
-                    ? "🟪 "
-                    : "☑️ "
-                  : ""}{" "}
-                {channel}
-              </button>
+              <div className="channel-buttons">
+                <button
+                  className={`channel-btn ${
+                    !allowMultipleChannels() && currentChannel() === channel
+                      ? "active"
+                      : ""
+                  }`}
+                  onClick={() => {
+                    if (currentChannel() !== channel) {
+                      setCurrentChannel(channel);
+                      setCurrentMessage("Channel has been changed.");
+                      setIsCopied(false);
+                    }
+                    setPublisherChannel(channel);
+                    if (!allowMultipleChannels()) {
+                      return;
+                    }
+                    if (hiddenChannels().includes(channel)) {
+                      setHiddenChannels((prev) =>
+                        prev.filter((ch) => ch !== channel)
+                      );
+                    } else {
+                      setHiddenChannels((prev) => [...prev, channel]);
+                    }
+                  }}
+                >
+                  {allowMultipleChannels()
+                    ? hiddenChannels().includes(channel)
+                      ? "🟪 "
+                      : "☑️ "
+                    : ""}{" "}
+                  {channel}
+                </button>
+                <button
+                  onClick={() => {
+                    if (
+                      !confirm(
+                        `Are you sure you want to clear all messages for ${channel}?`
+                      )
+                    )
+                      return;
+                    setIncomingMessages((prev) => {
+                      const { [channel]: _, ...rest } = prev;
+                      return rest;
+                    });
+                  }}
+                >
+                  Clear
+                </button>
+              </div>
             )}
           </For>
         </div>

@@ -158,6 +158,25 @@ button.channel-btn {
   display: flex;
   gap: 10px;
 }
+.channel-buttons {
+  display: flex;
+  gap: 10px;
+
+  position: relative;
+}
+.channel-buttons button:nth-child(2) {
+  background-color: var(--danger-color);
+  color: var(--light-color);
+  position: absolute;
+  right: 0;
+  top: -50%;
+  transform: translateY(50%);
+  font-size: 12px;
+  display: none;
+}
+.channel-buttons:hover button:nth-child(2) {
+  display: block;
+}
 .current-message-viewer button {
   position: sticky;
   top: 0;
