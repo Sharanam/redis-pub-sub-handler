@@ -10,6 +10,16 @@ export default function App() {
   const ws = new WebSocket(`ws://localhost:${import.meta.env.WS_PORT || 8081}`);
   onMount(() => {
     document.addEventListener("keydown", (e) => {
+      // ignore if the target is an input field or a textarea or if any of the modifier keys are pressed
+      if (
+        ["INPUT", "TEXTAREA"].includes(e.target.tagName) ||
+        e.ctrlKey ||
+        e.shiftKey ||
+        e.altKey ||
+        e.metaKey
+      )
+        return;
+
       // left arrow key
       if (e.keyCode === 37) {
         document.querySelector(".selected")?.previousElementSibling?.click();
@@ -43,8 +53,8 @@ export default function App() {
 
   const [diffMessage, setDiffMessage] = createSignal("");
 
-  const [showBeatifiedOnly, setShowBeatifiedOnly] = createSignal(
-    window.localStorage.getItem("showBeatifiedOnly") === "true" || false
+  const [showBeautifiedOnly, setShowBeautifiedOnly] = createSignal(
+    window.localStorage.getItem("showBeautifiedOnly") === "true" || false
   );
 
   const [myTheme, setMyTheme] = createSignal(
@@ -132,8 +142,8 @@ export default function App() {
             }
             setIsAudio(val);
           }}
-          showBeatifiedOnly={showBeatifiedOnly}
-          setShowBeatifiedOnly={setShowBeatifiedOnly}
+          showBeautifiedOnly={showBeautifiedOnly}
+          setShowBeautifiedOnly={setShowBeautifiedOnly}
         />
       </div>
       <div className="window">
@@ -272,7 +282,7 @@ export default function App() {
           </Show>
         </div>
         <Show
-          when={showBeatifiedOnly()}
+          when={showBeautifiedOnly()}
           fallback={
             <div className="diff-message-viewer">
               <div innerHTML={diffMessage()}></div>
