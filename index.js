@@ -27,7 +27,7 @@ const publisher = redisClient.duplicate();
 
   await publisher.connect();
 
-  console.log("Redis connected to " + (process.env.REDIS_URL || "localhost"));
+  console.log(`Redis connected to ${redisClient.options.url}`);
 })();
 
 const wss = new WebSocket.Server({ port: process.env.WS_PORT || 8080 });
