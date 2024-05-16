@@ -6,8 +6,12 @@ dotenv.config();
 
 const redisClient = redis.createClient({
   // staging redis
-  url: process.env.REDIS_URL || "redis://127.0.0.1:6379",
-  password: process.env.REDIS_PASSWORD || "",
+  url: process.env.IS_STAGING
+    ? process.env.REDIS_URL_STAGING
+    : process.env.REDIS_URL_LOCAL || "redis://127.0.0.1:6379",
+  password: process.env.IS_STAGING
+    ? process.env.REDIS_PASSWORD_STAGING
+    : process.env.REDIS_PASSWORD_LOCAL || "",
 
   database: process.env.REDIS_DB || 0,
 });
@@ -36,12 +40,13 @@ wss.on("connection", (ws) => {
     try {
       message = JSON.parse(message);
     } catch (_) {
-      message = message.toString();
+      message = message.toString().trim();
     }
-    publisher.publish(
-      message?.channel || "test-channel",
-      message.message || message
-    );
+    if (message)
+      publisher.publish(
+        message?.channel || "test-channel",
+        message.message || message
+      );
   });
 });
 
