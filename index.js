@@ -19,7 +19,7 @@ const redisClient = redis.createClient({
 const subscriber = redisClient;
 const publisher = redisClient.duplicate();
 
-(async function () {
+async function setup() {
   await subscriber.connect();
   subscriber.pSubscribe("*", (message, channel) => {
     sendSocket(channel + ": " + message.toString());
@@ -28,26 +28,31 @@ const publisher = redisClient.duplicate();
   await publisher.connect();
 
   console.log(`Redis connected to ${redisClient.options.url}`);
-})();
+}
+setup();
 
 const wss = new WebSocket.Server({ port: process.env.WS_PORT || 8080 });
 
 wss.on("connection", (ws) => {
-  sendSocket("Welcome: New messages will start appearing here....");
+  try {
+    sendSocket("Welcome: New messages will start appearing here....");
 
-  ws.on("message", (message) => {
-    // sendSocket(message);
-    try {
-      message = JSON.parse(message);
-    } catch (_) {
-      message = message.toString().trim();
-    }
-    if (message)
+    ws.on("message", (message) => {
+      // sendSocket(message);
+      try {
+        message = JSON.parse(message);
+      } catch (_) {
+        message = message.toString().trim();
+      }
+      // if (message)
       publisher.publish(
         message?.channel || "test-channel",
         message.message || message
       );
-  });
+    });
+  } catch (error) {
+    console.error(error);
+  }
 });
 
 function sendSocket(msg) {
