@@ -17,10 +17,16 @@ Follow the steps below to get the project up and running:
 2. Create `.env` file with the necessary/default configuration settings.
 
    ```.env
-      REDIS_URL="redis://127.0.0.1:6379" # address of the Redis server
-      REDIS_PASSWORD=""
-      REDIS_DB=0
-      WS_PORT=8080
+   IS_STAGING = 1 // turn this off if using local
+
+   REDIS_URL_LOCAL = "redis://127.0.0.1:6379";
+   REDIS_PASSWORD_LOCAL = "";
+
+   REDIS_URL_STAGING = "redis://#########";
+   REDIS_PASSWORD_STAGING = "########";
+
+   REDIS_DB = 0;
+   WS_PORT = 8081;
    ```
 
 3. Start the server with the command:
