@@ -32,6 +32,11 @@ export default function App() {
       if (e.keyCode === 67) {
         document.querySelector("button[data-name='copy button']")?.click();
       }
+
+      // repeat button click on r key
+      if (e.keyCode === 82) {
+        document.querySelector("button[data-name='repeat button']")?.click();
+      }
     });
   });
 
@@ -300,6 +305,23 @@ export default function App() {
               }}
             >
               Hide
+            </button>
+            <button
+              onClick={() => {
+                ws.send(
+                  JSON.stringify({
+                    channel: publisherChannel(),
+                    message: document
+                      .querySelector("[data-name='current-message']")
+                      .textContent.replace(/\n/g, " "),
+                  })
+                );
+              }}
+              title="press r to repeat"
+              data-name="repeat button"
+              disabled={!currentMessage()}
+            >
+              Repeat
             </button>
             <button
               onClick={() => {
